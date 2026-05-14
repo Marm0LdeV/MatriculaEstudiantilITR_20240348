@@ -14,5 +14,5 @@ Support: support@example.com
 </Footer>
 </div>
 
-`;
+`;  
 export default HTMLRecoveryEmail
