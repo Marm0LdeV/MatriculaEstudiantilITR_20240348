@@ -8,9 +8,10 @@ import EstudiantesRoutes from "./src/routes/students.js"
 import logoutRoutes from "./src/routes/logout.js"
 import LoginEstudiantes from "./src/routes/loginStudents.js"
 import RegisterStudentRoutes from "./src/routes/registerStudent.js"
-import RegisterTeacher from "./src/routes/registerTeachers.js"
+import RegisterTeacherRoutes from "./src/routes/registerTeachers.js"
 import StudentsRecoveryPass from "./src/routes/recoveryPasswordStudents.js"
 import TeachersRecoveryPass from "./src/routes/recoveryPasswordStudents.js"
+import loginTeachers from "./src/routes/loginTeachers.js"
 
 //Ejecutar express
 const app = express ();
@@ -36,7 +37,7 @@ app.use("/api/logout", logoutRoutes);
 app.use("/api/Materias", MateriasRoutes);
 app.use("/api/Profesores", ProfesoresRoutes);
 app.use("/api/RegisterStudent", RegisterStudentRoutes);
-app.use("/api/RegisterTeacher", RegisterTeacher);
+app.use("/api/RegisterTeacher", RegisterTeacherRoutes);
 app.use("/api/StudentsRecoveryPass", StudentsRecoveryPass);
 app.use("/api/TeachersRecoveryPass", TeachersRecoveryPass);
 app.use("/api/loginTeachers", loginTeachers);

@@ -1,5 +1,5 @@
 import express from "express"; 
-import studentsController from "../Controller/StudentsController.js";
+import studentsController from "../Controller/EstudiantesController.js";
 
 //Router () nos ayudara a colocar los métodos que tendra mi endpoint
 
