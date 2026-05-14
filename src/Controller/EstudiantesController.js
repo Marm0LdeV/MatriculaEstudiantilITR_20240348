@@ -14,7 +14,7 @@ studentsController.getStudents = async (req, res) => {
     phone} = req.body;
     const newStudent = new studentsModel ({name, lastName, email, password, birthdate, speciality_id, carnet, phone});
     await newStudent.save();
-    res.json ({message: "Regisro de estudiante guardado"});
+    res.json ({message: "Registro de estudiante guardado"});
 };
 
 //UPDATE 

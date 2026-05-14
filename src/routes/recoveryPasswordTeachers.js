@@ -1,0 +1,11 @@
+import express from "express";
+
+import recoveryPasswordTeachers from "../Controller/TeachersRecoveryPassword";
+
+const router = express.Router ();
+
+router.route ("/requestCOde").post(recoveryPasswordTeachers.requestCode);
+router.route("/verifyCode").post(recoveryPasswordTeachers.VerifyCode);
+router.route("/newPassword").post(recoveryPasswordTeachers.newPassword);
+
+export default router;

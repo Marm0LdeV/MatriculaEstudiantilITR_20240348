@@ -2,22 +2,20 @@ import HTMLRecoveryEmail from "../utils/SendmailRecovery.js"
 
 import { config } from "../../config.js";
 
-import studentsModel from "../models/Estudiantes.js";
-import { JsonWebTokenError } from "jsonwebtoken";
-import { json } from "express";
+import TeacherModel from "../models/profesores.js";
 
-const recoveryPasswordController = {};
+const TeacherrecoveryPasswordController = {};
 
 //Solicitar el código por correo electrónico
-recoveryPasswordController.requestCode = async (req,res) => {
+TeacherrecoveryPasswordController.requestCode = async (req,res) => {
     try {
         //Solicitamos los datos 
         const { email } = req.body;
 
         //Validar que el correo si este en la BD
-        const userFound = await customerModel.findOne({ email });
+        const userFound = await TeacherModel.findOne({ email });
 
-        if (!userFOund){
+        if (!userFound){
             return res.json({message: "User not found"});
         }
 
@@ -27,7 +25,7 @@ recoveryPasswordController.requestCode = async (req,res) => {
         //Guardar todo en un token
         const token = jsonwebtoken.sign (
             //#1- ¿Que vamos a guardar? payload
-            {email, code, usertype: "customer", verified: false},
+            {email, code, usertype: "Teacher", verified: false},
             //#2- Secret key
             config.JWT.secret,
             //#3- ¿Cuanto expira? 
@@ -68,7 +66,7 @@ recoveryPasswordController.requestCode = async (req,res) => {
 };
 
 //Verificar el código 
-recoveryPasswordController.verifyCode= async (req,res) => {
+TeacherrecoveryPasswordController.verifyCode= async (req,res) => {
     try {
         // #1- Solicitar los datos
         const { codeRequest } = req.body;
@@ -88,7 +86,7 @@ recoveryPasswordController.verifyCode= async (req,res) => {
         //que ya esta verificado
         const newToken = jsonwebtoken.sign (
             //#1- QUe vamos a guardar 
-            {email: decoded.email, usertype: "customer", verified: true},
+            {email: decoded.email, usertype: "Teacher", verified: true},
             //#2- Secret key
             config.JWT.secret,
             { expiresIn: "15m"},
@@ -96,8 +94,43 @@ recoveryPasswordController.verifyCode= async (req,res) => {
 
         res.cookie("recoveryCookie", newToken, { maxAge: 15 * 60 * 1000});
 
-        return res.status(200).json({message: "Code"})
+        return res.status(200).json({message: "El codigo ha sido verificado exitosamente!"})
     } catch (error) {
-        
+        console.log("error" + error);
+        return res.status(500).json({message: "Internal server error"});
     }
-}
+};
+
+TeacherrecoveryPasswordController.newPassword = async (req,res) => {
+    try {
+        //#1- Solicitar los datos
+        const {newPassword, confirmNewPassword} = req.body;
+
+        //Comparar contraseñas
+        if (newPassword !== confirmNewPassword){
+            return res.status (400).json({message: "La contraseña no coincide"})
+        }
+        
+        //Vamos a comprobar si el token ya está verificado
+        const token = req.cookies.recoveryCookie;
+        const decoded = jsonwebtoken.verify(token, config.JWT.secret);
+
+        //encriptamos la contraseña 
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+
+        await customerModel.findOneAndUpdate(
+            {email: decoded.email},
+            {password: passwordHash},
+            {new: true},
+        );
+
+
+        res.clearCookie (recoveryCookie);
+        return res.status (200)({message: "Password updated"});
+    } catch (error) {
+        console.log("error" + error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+};
+
+export default TeacherrecoveryPasswordController

@@ -1,31 +1,30 @@
-import studentsModel from "../models/Estudiantes.js";
+import teacherModel from "../models/profesores.js";
 
 import { config } from "../../config.js"
 
 //Creo un array de funciones
-const registerStudentController = {}; 
+const registerTeacherController = {}; 
 
-registerStudentController.register = async (req, res) => {
+registerTeacherController.register = async (req, res) => {
     //#1- Solicitar los datos a resgistrar
     const {
-        name,
-        lastName,
-        email,
-        password,
-        birthdate,
-        speciality_id,
-        carnet,
-        phone,
-        isVerified,
-        loginAttempts,
-        timeOut
+    name,
+    lastName,
+    email,
+    password,
+    phone,
+    hiredate,
+    isActive,
+    isVerified,
+    loginAttempts,
+    timeOut
     } = req.body; 
 
     try {
         //Verificar si el estudiante ya existe
-        const existStudent = await studentsModel.findOne({ email });
-        if ( existStudent ) {
-            return res.status (400).json ({message: "Teachers already exist"});
+        const existTeacher = await teacherModel.findOne({ email });
+        if ( existTeacher ) {
+            return res.status (400).json ({message: "Teacher already exist"});
         }
         
         //Encriptar la contraseña 
@@ -37,14 +36,13 @@ registerStudentController.register = async (req, res) => {
         //generamos token para guardar el codigo aleatroio
         const tokenCode = JsonWebToken.sign (
             //#1- ¿Que vamos a guardar?
-        {   name,
+        {       name,
             lastName,
             email,
             passwordHash,
-            birthdate,
-            speciality_id,
-            carnet,
             phone,
+            hiredate,
+            isActive,
             isVerified,
             loginAttempts,
             timeOut
@@ -88,7 +86,7 @@ registerStudentController.register = async (req, res) => {
 };
 
 //Verificar que el código que le acabamos de mandar
-registerStudentController.verifyCode = async (req,res) => {
+registerTeacherController.verifyCode = async (req,res) => {
     try {
         //#1- Solicitmos el código que el usuario haya escrito en el frontend
         const {verificationCodeRequest} = req.body
@@ -99,18 +97,17 @@ registerStudentController.verifyCode = async (req,res) => {
         //#3- Ver que código esta en el token
         const decoded = JsonWebToken.verify(token, config.JWT.secret);
         const{
-            name,
-            lastName,
-            email,
-            verificationCode: storedCode,
-            password,
-            birthdate,
-            speciality_id,
-            carnet,
-            phone,
-            isVerified,
-            loginAttempts,
-            timeOut          
+        name,
+        lastName,
+        email,
+        password,
+        phone,
+        verificationCode: storedCode,
+        hiredate,
+        isActive,
+        isVerified,
+        loginAttempts,
+        timeOut          
         } = decoded; 
 
         //Paso Final: comparar el código que el usuario escribe con el código que esta en el token
@@ -119,27 +116,27 @@ registerStudentController.verifyCode = async (req,res) => {
         }
 
         //Guardamos todo en la base de datos
-        const newStudent = new studentsModel({
-            name,
-            lastName,
-            email,
-            password: passwordHash,
-            birthdate,
-            speciality_id,
-            carnet,
-            phone,
-            isVerified,
-            loginAttempts,
-            timeOut            
+        const newTeacher = new teacherModel({
+        name,
+        lastName,
+        email,
+        password: passwordHash,
+        phone,
+        verificationCode: storedCode,
+        hiredate,
+        isActive,
+        isVerified,
+        loginAttempts,
+        timeOut           
         });
 
         //Guardamos todo 
-        await newStudent.save();
+        await newTeacher.save();
 
         //SI el código esta bien, entonces colocamos el campo isverified
-        const student = await studentsModel.findOne({email})
-        student.isVerified = true;
-        await student.save();
+        const teacher = await teacherModel.findOne({email})
+        teacher.isVerified = true;
+        await teacher.save();
         //
         res.json ({ message: "Email verified succesfully"});
     } catch (error) {
@@ -148,4 +145,4 @@ registerStudentController.verifyCode = async (req,res) => {
     }
 };
 
-export default registerStudentController
+export default registerTeacherController

@@ -1,13 +1,13 @@
 import { config } from "../../config"
 
 //Array de funciones 
-const loginStudentsController = {}; 
+const loginTeachersController = {}; 
 
-loginStudentsController.login = async (req, res) => {
+loginTeachersController.login = async (req, res) => {
     try {
         //Solicitar los datos
         const {email, password} = req.body;
-        const userFound = await studentModel.findOne({email});
+        const userFound = await teacherModel.findOne({email});
 
         if(!userFound) {
             return res.status(404).json({message: "Estudiante no encontrado"});
@@ -42,7 +42,7 @@ loginStudentsController.login = async (req, res) => {
         //crear el token 
         const token = JsonWebToken.sign(
         //#1- ¿Que vamos a guardar
-        { id: userFound._id, usertype: "Student"},
+        { id: userFound._id, usertype: "Teacher"},
         //#2- Secret Key
         config.JWT.secret,
         {expiresIn: "30d"},
