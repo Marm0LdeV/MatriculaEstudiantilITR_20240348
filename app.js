@@ -1,5 +1,7 @@
 //IMPORTS DE ENDPOINTS
 import express from "express"
+import cors from "cors"
+import cookieParser from "cookie-parser"
 import EspecialidadesRoutes from "./src/routes/Especialidades.js"
 import MateriasRoutes from "./src/routes/Materias.js"
 import PagosRoutes from "./src/routes/pagosdeMatricula.js"
@@ -10,19 +12,19 @@ import LoginEstudiantes from "./src/routes/loginStudents.js"
 import RegisterStudentRoutes from "./src/routes/registerStudent.js"
 import RegisterTeacherRoutes from "./src/routes/registerTeachers.js"
 import StudentsRecoveryPass from "./src/routes/recoveryPasswordStudents.js"
-import TeachersRecoveryPass from "./src/routes/recoveryPasswordStudents.js"
+import TeachersRecoveryPass from "./src/routes/recoveryPasswordTeachers.js"
 import loginTeachers from "./src/routes/loginTeachers.js"
 
 //Ejecutar express
 const app = express ();
 
 app.use (cors ({
-    origin: ["http//localhost: 5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     //Permitir el envío de cookies y creenciales
     credentials: true 
 }))
 
-app.use( limiter );
+// app.use( limiter );
 
 app.use ( cookieParser ());
 

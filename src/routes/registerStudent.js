@@ -5,3 +5,5 @@ const router = express.Router ();
 
 router.route("/").post(registerStudentController.register)
 router.route("/verifyCodeEmail").post(registerStudentController.verifyCode)
+
+export default router;

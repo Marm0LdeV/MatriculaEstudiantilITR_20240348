@@ -1,4 +1,4 @@
-import { config } from "../../config"
+import { config } from "../../config.js"
 
 //Array de funciones 
 const loginTeachersController = {}; 
@@ -58,3 +58,5 @@ loginTeachersController.login = async (req, res) => {
         return res.status(500).json({message: "Internal server error"});
     }
 }
+
+export default loginTeachersController;

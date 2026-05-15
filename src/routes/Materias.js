@@ -5,12 +5,13 @@ import materiascontroller from "../Controller/materiasController.js"
 const router = express.Router ();
 
 router.route("/")
-.get(materiascontroller.getStudents);
+.get(materiascontroller.getMaterias)
+.post(materiascontroller.insert);
 
-router.route("/searchByName").post(materiascontroller.searchByName)
+// router.route("/searchByName").post(materiascontroller.searchByName)
 
 router.route("/:id")
-.put(materiascontroller.updateStudents)
-.delete(materiascontroller.deleteStudents);
+.put(materiascontroller.UpdateMaterias)
+.delete(materiascontroller.DeleteMaterias);
 
 export default router; 

@@ -133,4 +133,4 @@ StudentsrecoveryPasswordController.newPassword = async (req,res) => {
     }
 };
 
-export default recoveryPasswordController
+export default StudentsrecoveryPasswordController;

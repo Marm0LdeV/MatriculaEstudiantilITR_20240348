@@ -6,11 +6,10 @@ import PagosController from "../Controller/PagosController.js";
 const router = express.Router ();
 
 router.route("/")
-.get(PagosController.getPayments);
-
-router.route("/searchByName").post(studentsController.searchByName)
-
+.get(PagosController.getPayments)
 .post(PagosController.insertPayments);
+
+// router.route("/searchByName").post(studentsController.searchByName)
 
 
 router.route("/:id")

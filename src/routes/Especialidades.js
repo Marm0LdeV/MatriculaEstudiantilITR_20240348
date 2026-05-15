@@ -7,7 +7,7 @@ const router = express.Router ();
 
 router.route("/")
 .post(especialidadesController.insertSpecialities)
-.get(especialidadesController.getStudents);
+.get(especialidadesController.getSpecialities);
 
 router.route("/:id")
 .put(especialidadesController.UpdateSpecialities)
